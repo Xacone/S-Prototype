@@ -50,18 +50,22 @@ QString LearnMore()
     return R"(
 
            <html>
-           <body style="font-family:calibri;">
-           <h1 style="text-align:center;"> Guide </h1>
-           <p> La syntaxe de filtrage de Prototype est la même que celle Winpcap </p>
+           <body style="font-family:calibri; font-size:17px;">
+           <h1 style="text-align:center; font-size:35px;" > Guide de filtrage </h1>
 
-           <ul>
-               <li><a href="#">Utilisation</li>
-               <li><a href="#">Pirate</li>
-               <li><a href="#">Test</li>
-               <li><a href="#">Test</li>
-               <li><a href="#">Filtrage</li>
-               <li><a href="#">Sauvegardes</li>
-           </ul>
+           Le filtrage est une fonctionnalité qui permet de filtrer les paquets capturés selon leur(s) type(s).<br>
+           Une fois le filtre appliqué, seuls les paquets correspondants au filtre seront capturés et traités.<br>
+           Attention, cette fonctionnalité ne détruit pas les paquets qui ne correspondent pas au filtre, ils ne sont qu'ignorés.<br>
+           L'expression du filtre doit être saisie dans la barre en haut de cet onglet.<br>
+           <br>
+           Si vous souhaitez appliquer le filtre uniquement sur votre machine saisissez votre expression sans arguments, si vous souhaitez que le filtre s'applique sur tous les agents, ajoutez l'argument <b>-slaves-all</b> à la fin de votre expression.
+           Si vous souhaitez appliquer le filtre sur un seul agent, saisissez à la fin de votre expression <b>-slave <i>@IP de l'agent</i></b><br>
+
+
+
+
+
+
 
            </body>
            </html>

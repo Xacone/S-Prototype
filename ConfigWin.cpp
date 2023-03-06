@@ -53,7 +53,6 @@ void Win::init_conf_win()
                 opt_capture->setVisible(false);
 
                     QGroupBox *opt_capture_group_1 = new QGroupBox("Affichage");
-                        opt_capture_group_1->setFixedHeight(250);
                     QVBoxLayout *opt_capture_layout_1 = new QVBoxLayout();
                     show_packet_len = new QCheckBox("Afficher la taille des paquets");
                     show_packet_index = new QCheckBox("Afficher la numérotation");
@@ -74,6 +73,7 @@ void Win::init_conf_win()
                     cap_mode->addItem("Mode tableau");
                     opt_capture_layout_1->addWidget(cap_mode);
 
+
                     // show_packet_color->setChecked(jwax.value({"cap_opt", "show_packet_coloration"}).toBool());
 
                     opt_capture_layout_1->addWidget(show_packet_len);
@@ -85,7 +85,10 @@ void Win::init_conf_win()
 
                     opt_capture_pref = new QWidget();
                     opt_capture_param_int = new QWidget();
-                    opt_capture_filtrage = new QWidget();
+                    opt_capture_filtrage = panel_info;
+
+                    opt_capture_layout_1->addWidget(opt_capture_filtrage);
+                    opt_capture_filtrage->setVisible(false);
 
                 opt_protoc = new QWidget();
                 QVBoxLayout *opt_protoc_layout = new QVBoxLayout();
@@ -130,5 +133,6 @@ void Win::init_conf_win()
 
 
         QObject::connect(config_tree, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(widget_associated_to_choice(QTreeWidgetItem*, int)));
-        QObject::connect(cap_mode, SIGNAL(activated(int)), this, SLOT(set_cap_mode(int)));
+        //QObject::connect(cap_mode, SIGNAL(activated(int)), this, SLOT(set_cap_mode(int)));
+
 }

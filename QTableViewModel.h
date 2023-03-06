@@ -1,4 +1,4 @@
-#ifndef QTABLEVIEWMODEL_H
+    #ifndef QTABLEVIEWMODEL_H
 #define QTABLEVIEWMODEL_H
 
 
@@ -202,6 +202,7 @@ class Model_CoworkerThread : public QThread
 
 private:
     Packets_TableModel *ptm;
+
 public:
     Model_CoworkerThread() { ptm = new Packets_TableModel(); }
     void run() override

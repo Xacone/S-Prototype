@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include "QTableViewModel.h"
 #include "RoutingTableModel.h"
+#include "TcpTableModel.h"
 #include <QMenuBar>
 #include <QToolBar>
 #include <QLineEdit>
@@ -16,6 +17,7 @@
 #include <QSplitter>
 #include "pcap.h"
 #include <QAction>
+#include <QTreeWidgetItem>
 #include <QCheckBox>
 #include <QProcess>
 #include <QTextEdit>
@@ -46,9 +48,16 @@
 #include "CaptureThreads.h"
 #include "CaptureThreads_FCTS.h"
 #include "ProcAndFuncs.h"
+#include "QWebEngineView"
+#include "SprotoServers.h"
+#include "CSVParsingUtils.h"
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include "DatabaseUtils.h"
 
 void only_one_win(QWidget*);
 QList<QStringList>* routing_list();
+QList<QStringList>* tcp_list();
 
 class S_A_T : public QThread
 {
@@ -56,6 +65,7 @@ class S_A_T : public QThread
     qreal pack_size = 0;
     qreal pack_nbr = 0;
     QTreeWidgetItem *dev;
+
 public:
     S_A_T(QTreeWidgetItem* qtwi) : dev(qtwi) {};
 
@@ -98,7 +108,7 @@ class CustomConsole : public QTextEdit
 private:
     QByteArray Buffer;
     QString StringBuffer;
-    QString starter = "sproto>";
+    QString starter = "sproto>>";
     bool user_moved_cursor = false;
     QPalette pal;
     QList<QString> PAST;
@@ -145,7 +155,7 @@ public:
                             std::cout << "Running" << std::endl;
                             PH.kill();
                         } else {
-                            if((StringBuffer.contains("netstat") || StringBuffer.contains("ping") || StringBuffer.contains("tracert") || StringBuffer.contains("arp") || StringBuffer.contains("ipconfig") || StringBuffer.contains("route")) && !(StringBuffer.contains("&") || StringBuffer.contains("|")))
+                            if((StringBuffer.contains("netstat") || StringBuffer.contains("nmap") || StringBuffer.contains("ping") || StringBuffer.contains("tracert") || StringBuffer.contains("arp") || StringBuffer.contains("ipconfig") || StringBuffer.contains("route")) && !(StringBuffer.contains("&") || StringBuffer.contains("|")))
                               {
                                  PH.WIN32_CMDPROCESS(StringBuffer);
                              } else {
@@ -221,6 +231,45 @@ public slots:
 
 };
 
+class Win32_Utils_Refresher : public QThread
+{
+
+    Q_OBJECT
+
+private:
+    QList<QStringList>* routing_lst;
+    QList<QStringList>* net_status_lst;
+
+public:
+
+    Win32_Utils_Refresher()
+    {
+        routing_lst = routing_list();
+        net_status_lst = tcp_list();
+    }
+
+    inline void run() override
+    {
+        while(true)
+        {
+            routing_lst = routing_list();
+            net_status_lst = tcp_list();
+            emit here_is_routing_table(routing_lst);
+            emit here_is_tcp_net_table(net_status_lst);
+            this->thread()->sleep(3);
+        }
+    }
+
+    QList<QStringList>* getRoutingList() { return routing_lst; }
+    QList<QStringList>* getNetStatusList() { return net_status_lst; }
+
+
+signals:
+    void here_is_routing_table(QList<QStringList>*);
+    void here_is_tcp_net_table(QList<QStringList>*);
+
+};
+
 
 class Win : public QMainWindow
 {
@@ -230,9 +279,12 @@ class Win : public QMainWindow
 
 protected:
 
-    /* ----------- GLOBAL USE ----------- */
+    /* ----------- GLOBAL USE / RAFRAICHISSEMENT ----------- */
+    Win32_Utils_Refresher *refresher = new Win32_Utils_Refresher();
     QList<QStringList> *_ROUTING_TABLE_RETRIEVED_ = routing_list();
-    /* ---------------------------------- */
+    QList<QStringList> *_TCP_TABLE_RETRIEVED_ = tcp_list();
+
+    /* --------------------------------------------------------------- */
 
     int index_on_pcktsize_chart = 0;
     int index_on_tcp_chart = 0;
@@ -249,7 +301,8 @@ protected:
     // Device capture & Threads
     QMutex *mutx;
     pcap_if_t* all_devs;
-
+        /* ---- IMPORTANTS ---- */
+        Capture_WorkerThread *cwt_1;
 
     // General
     QPalette* _pal_;
@@ -291,6 +344,7 @@ protected:
 
     /* ----- Tools ----- */
     QAction *get_agents_list;
+    QAction *action_map;
     QAction *http_brief;
     QAction *stp_brief;
     QAction *dot_1q_brief;
@@ -418,8 +472,20 @@ protected:
 
                      /* --------- EVENTS --------- */
                      QWidget *evenements;
+                     QHBoxLayout *events_h_lay;
+                     QToolBar  *events_toolb;
+                        QAction show_associated_packets;
+                            QAction json_report;
+                            QAction xml_report;
+                            QAction pdf_report;
+                        QAction send_info;
+
                         QVBoxLayout *v_layout_1_2;
-                        EventView_TableModel *ETM;
+                        QTableView *ETMTV;
+                            EventView_TableModel *ETM;
+                            QList<QStringList> *Events_view_info;
+                        QTextEdit *ETM_TE;
+                        QTextEdit *ETM_TE2_TEST;
 
                      QWidget *panel_wifi;
                         QVBoxLayout *v_layout_1_3;
@@ -431,14 +497,43 @@ protected:
             QVBoxLayout *v_layout_2;
                 QTableWidget *event_view;
 
+     /* ----------------- STATISTICS ----------------- */
+                   QWidget *panel_stats;
+                   QGridLayout *panel_stats_gl;
+
+                   QHBoxLayout *_DASHBOARD_;
+                        QLabel *_events_nbr;
+                        QLabel *_agents_nbr;
+                        QLabel *_critical_nbr;
+                        QLabel *_magnitude_;
+
+                        QChartView *L3_PROTOC_STATS;
+                            QPieSeries *L3_PS;
+                        QChartView *L4_PROTOC_STATS;
+                            QPieSeries *L4_PS;
+                        QChartView *L5_PROTOC_STATS;
+                            QPieSeries *L5_PS;
+
+                        QChartView *EVENTS_TYPE_STATS;
+
+     /* ----------------- WORLD MAP ----------------- */
+        QWidget *panel_map;
+        QVBoxLayout *panel_map_vl;
+            QWebEngineView *QWEV_MAP1;
+            QSqlDatabase db;
+            IpGeoLoc *ipgeoloc;
 
      /* -------------- ROUTING TABLE -------------- */
           QWidget *_ROUTING_TABLE_;
              QTableView *_ROUTING_VIEW_;
                 Routing_TableModel *_ROUTING_MODEL_;
 
+     /* -------------- TCP TABLE -------------- */
+          QWidget *_TCP_TABLE_;
+            QTableView *_TCP_TABLE_VIEW_;
+               Tcp_TableModel *_TCP_TABLE_MODEL_;
 
-    /* -------------- FenÃªtre de configuration -------------- */
+    /* -------------- Fenetre de configuration -------------- */
 
         QWidget *config_win;
             QHBoxLayout *config_root_layout;
@@ -493,10 +588,20 @@ protected:
             QVBoxLayout *int_win_group_box_layout;
                 QTreeWidget *int_win_tree_view;
 
-     /* -------------- FenÃªtre de donnÃ©es simple -------------- */
+     /* -------------- Fenetre de donnees simple -------------- */
         QWidget *text_data_widget;
             QVBoxLayout *text_data_layout;
                 QTextEdit *text_data;
+
+     /* -------------- Fenetre de Agents -------------- */
+
+                DATA_CONTROL_SRV *dc_srv;
+                CAP_SRV *srv;
+
+    QWidget *agent_panel;
+        QVBoxLayout *agent_panel_vbox;
+        QListWidget *QLW;
+
 
 public:
 
@@ -505,6 +610,11 @@ public:
         void init_conf_win();
         void _init_view_agents();
         void _init_routing_table();
+        void _init_tcp_table();
+        void _init_map();
+        void _init_agent_panel();
+        void _init_stats_panel();
+        int _init_wlan_panel();
         //void _init_arp_table();
         //void _init_dns_table();
         //void _init_sessions_table();
@@ -513,9 +623,10 @@ public:
 
         QTextEdit* getCapInfo();
 
-
 public slots:
 
+        void init_js_map1(bool);
+        void refresh_js_map1(QList<QStringList>*);
         /*
         void JSON_show_packet_size(int);
         void JSON_show_packet_index(int);
@@ -538,15 +649,22 @@ public slots:
 
         inline void widget_associated_to_choice(QTreeWidgetItem* qtwi, int dead)
         {
-            int cur_indx = config_tree->currentIndex().row();
+            Q_UNUSED(qtwi)
+            Q_UNUSED(dead)
+
             if(config_tree->currentItem()->parent() == NULL)
             {
-                if(cur_indx == 0) { opt_global->setVisible(true); } else { opt_global->setVisible(false); }
-                if(cur_indx == 1) { opt_capture->setVisible(true); } else { opt_capture->setVisible(false); }
-                if(cur_indx == 2) { opt_protoc->setVisible(true); } else { opt_protoc->setVisible(false); }
-                if(cur_indx == 3) { opt_agents->setVisible(true); } else { opt_agents->setVisible(false); }
-                if(cur_indx == 4) { opt_rapports->setVisible(true); } else { opt_rapports->setVisible(false); }
+                opt_global->setVisible(config_tree->topLevelItem(0)->isSelected() && config_tree->currentItem()->parent() == NULL);
+                opt_capture->setVisible(config_tree->topLevelItem(1)->isSelected() && config_tree->currentItem()->parent() == NULL);
+                opt_protoc->setVisible(config_tree->topLevelItem(2)->isSelected() && config_tree->currentItem()->parent() == NULL);
+                opt_agents->setVisible(config_tree->topLevelItem(3)->isSelected() && config_tree->currentItem()->parent() == NULL);
+                opt_rapports->setVisible(config_tree->topLevelItem(4)->isSelected() && config_tree->currentItem()->parent() == NULL);
             }
+
+            std::cout << config_tree->topLevelItem(1)->child(1)->isSelected() << std::endl;
+
+            opt_capture_filtrage->setVisible(config_tree->topLevelItem(1)->child(1)->isSelected());
+
         }
 
         inline void assert_point_to_size_per_sec_chart(qreal y)
@@ -662,7 +780,7 @@ public slots:
             }
         }
 
-        void add_slice_to_srv_pie(QString ip_addr) // Je t'aime
+        void add_slice_to_srv_pie(QString data) // Je t'aime
         {
             QPieSlice *target;
             QList<QPieSlice*> qpslist = http_srv_pie->slices();
@@ -672,7 +790,7 @@ public slots:
 
             for(int i = 0 ; i < qpslist.length() ; i++)
             {
-                if(qpslist.at(i)->label() == ip_addr)
+                if(qpslist.at(i)->label() == data)
                 {
                     j = i;
                     exist = true;
@@ -688,7 +806,7 @@ public slots:
                 target->setValue(target->value() + 1);
             } else {
                 target = new QPieSlice();
-                target->setLabel(ip_addr);
+                target->setLabel(data);
                 target->setValue(1);
                 target->setLabelVisible(true);
                 target->setLabelArmLengthFactor(label_length_index);
@@ -696,6 +814,42 @@ public slots:
             }
 
             http_srv_pie->append(target);
+        }
+
+        void add_data_to_pie(QString data, QtCharts::QPieSeries *qptarg)
+        {
+            QPieSlice *target;
+            QList<QPieSlice*> qpslist = qptarg->slices();
+
+            int j = 0;
+            bool exist = false;
+
+            for(int i = 0 ; i < qpslist.length() ; i++)
+            {
+                if(qpslist.at(i)->label() == data)
+                {
+                    j = i;
+                    exist = true;
+                    break;
+                } else {
+                    continue;
+                }
+            }
+
+            if(exist)
+            {
+                target = qptarg->slices().at(j);
+                target->setValue(target->value() + 1);
+            } else {
+                target = new QPieSlice();
+                target->setLabel(data);
+                target->setValue(1);
+                target->setLabelVisible(true);
+                target->setLabelArmLengthFactor(label_length_index);
+                //label_length_index += 0.02;
+            }
+
+            qptarg->append(target);
         }
 
         void add_data_to_http_brief_simple(QTreeWidgetItem* qtwi, QString http_hdr)
@@ -730,6 +884,9 @@ public slots:
 
         void add_data_to_http_brief(QString ip_addr, QString req_type, QString time, QString http_code, QString http_header)
         {
+            Q_UNUSED(time)
+            Q_UNUSED(http_code)
+
             QTreeWidgetItem *target;
 
                 QList<QTreeWidgetItem*> exist = http_brief_tree_view->findItems(ip_addr,0,0);
@@ -753,6 +910,7 @@ public slots:
 
          void slice_explosion(QTreeWidgetItem* widg, int dead)
          {
+            Q_UNUSED(dead)
             QPieSlice *target;
             QList<QPieSlice*> qpslist = http_srv_pie->slices();
             for(int i = 0; i < qpslist.size(); i++) { http_srv_pie->slices().at(i)->setExploded(false); }
@@ -785,6 +943,8 @@ public slots:
 
          void show_on_text_data_widget(QTreeWidgetItem* widg, int dead)
          {
+             Q_UNUSED(dead)
+
              if(widg->childCount() == 0)
              {
                  text_data_widget = new QWidget();
@@ -848,10 +1008,12 @@ public slots:
             void zoom_out_cap_panel();
             void clear_cap_panel();
             void sh_table_brief(bool b) { if(b) {hide_support->setVisible(true); root_layout->addWidget(hide_support, 5, 1, 2, 1); } else { hide_support->setVisible(false); root_layout->addWidget(hide_support, 5, 1, 0, 0);} };
-            inline void sh_conf_win(bool) { only_one_win(config_win); }
+            void sh_conf_win(bool) { only_one_win(config_win); }
+            void sh_map(bool) { panel_map->show(); }
             void sh_devs_conf();
             void play_btn(bool);
             void stop_btn(bool);
+            void sh_tcp_sessions(bool);
 
             /* -------------- DEV LIST SLOTS -------------- */
             int dev_verif_checking(QTreeWidgetItem*, int);
@@ -919,8 +1081,60 @@ public slots:
             }
 
 
+            void SET_EVENTS_TEXT(const QModelIndex& val) // !!!
+            {
+                ETM_TE->clear();
+
+                for(int i = 1 ; i < ETM->Details.at(val.row()).size() ; i++)
+                {
+                    ETM_TE->append(ETM->Details.at(val.row()).at(i));
+                }
+
+                ETM_TE2_TEST->setText(ETM->Details.at(val.row()).at(0));
+            }
+
+            void refresh_routing_table(QList<QStringList>* qlist)
+            {
+                _ROUTING_MODEL_ = new Routing_TableModel(*qlist);
+                _ROUTING_VIEW_->setModel(_ROUTING_MODEL_);
+            }
+
+            void refresh_tcp_net_table(QList<QStringList> *qlist)
+            {
+                 delete(_TCP_TABLE_MODEL_);
+                _TCP_TABLE_MODEL_ = new Tcp_TableModel(*qlist);
+                _TCP_TABLE_VIEW_->setModel(_TCP_TABLE_MODEL_);
+                for(int i = 0 ; i < _TCP_TABLE_MODEL_->rowCount() ; i++)
+                {
+                    _TCP_TABLE_VIEW_->setRowHeight(i,1);
+                }
+            }
+
+            void parse_on_tcp_map(QString reg, QString lati, QString longi)
+            {
+                QString req = "append_to_lst(";
+                req.append("'" + reg + "'" + ", ");
+                req.append(longi + ", ");
+                req.append(lati);
+                req.append(");");
+
+                QWEV_MAP1->page()->runJavaScript(req);
+            }
+
+            // EXTERNALLY DEFINED SLOTS
+            void append_host_to_list(QString);
+            void remove_host();
+
+            void _STATS_L3_PIE_(QString data) { add_data_to_pie(data, L3_PS); }
+            void _STATS_L4_PIE_(QString data) { add_data_to_pie(data, L4_PS); }
+            void _STATS_L5_PIE_(QString data) { add_data_to_pie(data, L5_PS); }
+            void _EVENT_() { _events_nbr->setText(QString::number(_events_nbr->text().toInt()+1)); }
+
+            void OPEN_DIAG(QListWidgetItem*);
+
 signals:
     void filter(QString, QLineEdit*);
+    void RequestForIP4Loc(QString);
 };
 
 
@@ -944,6 +1158,5 @@ private:
 signals:
   void zoomed();
 };
-
 
 #endif // MAINWIN_H

@@ -4,30 +4,37 @@
 #include "RoutingTableModel.h"
 #include <WS2tcpip.h>
 #include <iostream>
+
 #define MALLOC(x) HeapAlloc(GetProcessHeap(), 0, (x))
 #define FREE(x) HeapFree(GetProcessHeap(), 0, (x))
 
 using namespace std;
 
-PMIB_IPFORWARDTABLE pIpForwardTable;
-DWORD dwSize = 0;
-DWORD dwRetVal = 0;
-
-char szDestIp[128];
-char szMaskIp[128];
-char szGatewayIp[128];
-struct in_addr IpAddr;
-QList<QStringList> *_ROUTING_DATA_ = new QList<QStringList>;
-
+QList<QStringList> *_ROUTING_DATA_; // TO DISLOC
 
 QList<QStringList>* routing_list() {
+
+    cout << sizeof(_ROUTING_DATA_) << endl;
+
+    if(_ROUTING_DATA_ != NULL)
+    {
+        delete _ROUTING_DATA_;
+    }
+
+    _ROUTING_DATA_ = new QList<QStringList>;
+
+    PMIB_IPFORWARDTABLE pIpForwardTable;
+    DWORD dwSize = 0;
+    DWORD dwRetVal = 0;
+
+    struct in_addr IpAddr;
 
     int i;
 
     pIpForwardTable = (MIB_IPFORWARDTABLE *) MALLOC(sizeof (MIB_IPFORWARDTABLE));
     if (pIpForwardTable == NULL) {
         printf("Error allocating memory 1\n");
-        exit(1);
+        exit(-1); // TO ERR WIN !!
     }
 
     if (GetIpForwardTable(pIpForwardTable, &dwSize, 0) == ERROR_INSUFFICIENT_BUFFER) {
@@ -35,7 +42,7 @@ QList<QStringList>* routing_list() {
         pIpForwardTable = (MIB_IPFORWARDTABLE *) MALLOC(dwSize);
         if (pIpForwardTable == NULL) {
             printf("Error allocating memory 2\n");
-            exit(1);
+            exit(-1); // TO ERR WIN !!
         }
     }
 
@@ -145,10 +152,12 @@ void Win::_init_routing_table()
     QDesktopWidget dw;
     _ROUTING_TABLE_->setFixedSize(1300,500);
 
+        QObject::connect(refresher, SIGNAL(here_is_routing_table(QList<QStringList>*)), this, SLOT(refresh_routing_table(QList<QStringList>*)));
+
         QVBoxLayout *_ROUTING_TABLE_VBOX_ = new QVBoxLayout();
         _ROUTING_TABLE_->setLayout(_ROUTING_TABLE_VBOX_);
         _ROUTING_VIEW_ = new QTableView();
-        _ROUTING_VIEW_->resizeColumnsToContents();
+        _ROUTING_VIEW_->resizeColumnsToContents(); // Utile ???
         _ROUTING_TABLE_VBOX_->addWidget(_ROUTING_VIEW_);
                 _ROUTING_MODEL_ = new Routing_TableModel(*_ROUTING_TABLE_RETRIEVED_);
                     _ROUTING_VIEW_->setModel(_ROUTING_MODEL_);

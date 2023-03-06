@@ -21,7 +21,7 @@ public:
         if(role == Qt::BackgroundColorRole)
         {
             for(int i = -9 ; i < 9 ; i ++){
-                if(index(ind.row(), ind.column()+i).data() == "Local") { return QColor("#B5DDC2"); } else {
+                if(index(ind.row(), ind.column()+i).data() == "Local") { return QColor("#12CBC4"); } else {
                  if(index(ind.row(), ind.column()+i).data() == "Route statique établie lors de la configuration") { return QColor("#F2E3CF"); } else {
                    if(index(ind.row(), ind.column()+i).data() == "Redirection ICMP") { return QColor("#E3F0CE"); }
                     }

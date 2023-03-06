@@ -13,6 +13,13 @@ void only_one_win(QWidget *widg)
     }
 }
 
+void act_init(QAction *action, QIcon ico, QString title)
+{
+     action->setIcon(ico);
+     action->setText(title);
+     action->setToolTip(title);
+}
+
 Win::Win()
 {
     _this_ = this;
@@ -37,40 +44,47 @@ Win::Win()
     // Initialisations des fenêtres secondaires
     //conf_Win = new Config_win;
 
-    // Icones
-    QIcon server_icn("C:/Sproto_CPP_v3/Icons/icons8_server.ico");
-    QIcon fullscreen_icn("C:/Sproto_CPP_v3/Icons/full_screen_1.png");
-    QIcon font_size_icn("C:/Sproto_CPP_v3/Icons/font_size_1.png");
-    QIcon zoom_in_icn("C:/Sproto_CPP_v3/Icons/zoom_in.png");
-    QIcon zoom_out_icn("C:/Sproto_CPP_v3/Icons/zoom_out.png");
-    QIcon connect_icn("C:/Sproto_CPP_v3/Icons/devices_1.ico");
-    QIcon net_device_icn("C:/Sproto_CPP_v3/Icons/netcard_1.png");
-    QIcon wolf_icn("C:/Sproto_CPP_v3/Icons/wolf_1.png");
-    QIcon save_icn("C:/Sproto_CPP_v3/Icons/save.png");
-    QIcon save_as_icn("C:/Sproto_CPP_v3/Icons/save_as.png");
-    QIcon focus_2_icn("C:/Sproto_CPP_v3/Icons/focus_2.png");
-    QIcon open_file_icn("C:/Sproto_CPP_v3/Icons/open_file.png");
-    QIcon quit_icn("C:/Sproto_CPP_v3/Icons/exit_1.png");
-    QIcon honeypot_icn("C:/Sproto_CPP_v3/Icons/honeypot_1.png");
-    QIcon bluetooth_ocn("C:/Sproto_CPP_v3/Icons/bluetooth_1.png");
-    QIcon wifi_icn("C:/Sproto_CPP_v3/Icons/wifi_1.png");
-    QIcon log_icn("C:/Sproto_CPP_v3/Icons/log_1.png");
-    QIcon clear_icn("C:/Sproto_CPP_v3/Icons/clear_1.png");
-    QIcon brief_table_icn("C:/Sproto_CPP_v3/Icons/brief_table.png");
-    QIcon play_icn("C:/Sproto_CPP_v3/Icons/play_1.png");
-    QIcon stop_icn("C:/Sproto_CPP_v3/Icons/pause_1.png");
-    QIcon ssh_client_icn("C:/Sproto_CPP_v3/Icons/ssh.png");
-    QIcon data_icn("C:/Sproto_CPP_v3/Icons/data_1.png");
-    QIcon radar_icn("C:/Sproto_CPP_v3/Icons/radar_1.png");
-    QIcon terminal_icn("C:/Sproto_CPP_v3/Icons/terminal_1.png");
-    QIcon config_icn("C:/Sproto_CPP_v3/Icons/config_1.png");
-    QIcon alert_icn("C:/Sproto_CPP_v3/Icons/alert_1.png");
-    QIcon analyze_icn("C:/Sproto_CPP_v3/Icons/analyze_1.png");
-    QIcon chart_icn("C:/Sproto_CPP_v3/Icons/piechart2.png");
-    QIcon routing_icn("C:/Sproto_CPP_v3/Icons/ip_routing.ico");
-    QIcon dns_icn("C:/Sproto_CPP_v3/Icons/dns.ico");
-    QIcon arp_icn("C:/Sproto_CPP_v3/Icons/some_list.ico");
-    QIcon tcp_srv_icn("C:/Sproto_CPP_v3/Icons/servers_icn.ico");
+    // Icons
+    QIcon server_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/icons8_server.ico");
+    QIcon fullscreen_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/full_screen_1.png");
+    QIcon font_size_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/font_size_1.png");
+    QIcon zoom_in_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/zoom_in.png");
+    QIcon zoom_out_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/zoom_out.png");
+    QIcon connect_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/devices_1.ico");
+    QIcon net_device_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/netcard_1.png");
+    QIcon wolf_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/wolf_1.png");
+    QIcon save_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/save.png");
+    QIcon save_as_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/save_as.png");
+    QIcon focus_2_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/focus_2.png");
+    QIcon open_file_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/open_file.png");
+    QIcon quit_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/exit_1.png");
+    QIcon honeypot_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/honeypot_1.png");
+    QIcon bluetooth_ocn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/bluetooth_1.png");
+    QIcon wifi_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/wifi_1.png");
+    QIcon log_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/log_1.png");
+    QIcon clear_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/clear_1.png");
+    QIcon brief_table_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/brief_table.png");
+    QIcon play_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/play_1.png");
+    QIcon stop_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/pause_1.png");
+    QIcon ssh_client_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/ssh.png");
+    QIcon data_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/data_1.png");
+    QIcon radar_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/radar_1.png");
+    QIcon terminal_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/terminal_1.png");
+    QIcon config_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/config_1.png");
+    QIcon alert_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/alert_1.png");
+    QIcon analyze_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/analyze_1.png");
+    QIcon chart_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/piechart2.png");
+    QIcon routing_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/ip_routing.ico");
+    QIcon dns_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/dns.ico");
+    QIcon arp_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/some_list.ico");
+    QIcon tcp_srv_icn("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/servers_icn.ico");
+    QIcon globe("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/globe.png");
+    QIcon loupe("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/loupe.png");
+
+    QIcon pdf("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/pdf.png");
+    QIcon xml("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/xml.png");
+    QIcon json("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/json.png");
+    QIcon send("C:/Users/1234Y/OneDrive/Documents/SPROTO V3/Sproto_CPP_v3-20220927T114951Z-001/Sproto_CPP_v3/Icons/send.png");
 
     // Composants du menu
     file = menuBar()->addMenu("&Fichier");
@@ -132,8 +146,7 @@ Win::Win()
 
     /* -------------------- DEVICES -------------------- */
     dev_opt = new QAction();
-    dev_opt->setText("Options d'interfaces");
-    dev_opt->setIcon(connect_icn);
+    act_init(dev_opt, connect_icn, "Options d'interfaces");
     network_devices->addAction(dev_opt);
     network_devices->addSeparator();
 
@@ -149,16 +162,13 @@ Win::Win()
     network_devices->addAction(DNS_servers);
     DNS_servers->setIcon(dns_icn);
 
-    net_tcp_table = new QAction("Sessions");
+    net_tcp_table = new QAction("Sessions TCP");
     net_tcp_table->setIcon(tcp_srv_icn);
     network_devices->addAction(net_tcp_table);
 
-
     /* -------------------- CONFIG -------------------- */
     config = new QAction();
-    QString param_text = "Parametres";
-    config->setText(param_text);
-    config->setIcon(config_icn);
+    act_init(config, config_icn, "Paramètres");
     edit->addAction(config);
 
     /* -------------------- TOOLS -------------------- */
@@ -166,6 +176,10 @@ Win::Win()
     get_agents_list->setIcon(radar_icn);
     get_agents_list->setText("Agents actifs");
     tools->addAction(get_agents_list);
+
+    action_map = new QAction();
+    act_init(action_map, globe, "Carte");
+    tools->addAction(action_map);
 
     /* -------------------- MODULES -------------------- */
     honeyPot_Management = new QAction();
@@ -228,6 +242,7 @@ Win::Win()
     tool_bar->addAction(DNS_servers);
     tool_bar->addSeparator(); /* ------------------ */
     tool_bar->addAction(get_agents_list);
+    tool_bar->addAction(action_map);
     tool_bar->addSeparator(); /* ------------------ */
     tool_bar->addAction(ssh_client_check);
     tool_bar->addAction(agent_console_check);
@@ -258,13 +273,14 @@ Win::Win()
                             stop_cap = new QAction();
                             cap_info = new QTextEdit();
                             cap_table = new QTableView();
+                            cap_table->setSelectionBehavior(QAbstractItemView::SelectRows);
                             QPalette pal;
                             pal.setColor(QPalette::Base, QColor());
                             cap_table->setFont(QFont("Calibri", cap_tab_fsize, QFont::Bold));
                             cap_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
                                 MCT = new Model_CoworkerThread();
                                 MCT->start();
-                            cap_zoom_in = new QAction();
+                                cap_zoom_in = new QAction();
                             cap_zoom_out = new QAction();
                             packet_count = new QLabel("0");
                             clear_cap = new QAction();
@@ -293,6 +309,7 @@ Win::Win()
                                 pckt_per_sec->createDefaultAxes();
 
                                 pckt_per_sec->setTitle("Paquets par seconde");
+                                pckt_per_sec->setAnimationOptions(QChart::AllAnimations);
                                 pckt_per_sec->axes(Qt::Horizontal).first()->setRange(0,60);
                                 pckt_per_sec->axes(Qt::Horizontal).first()->setTitleText("Secondes");
                                 pckt_per_sec->axes(Qt::Vertical).first()->setRange(0,500);
@@ -312,6 +329,7 @@ Win::Win()
                                 size_per_sec->createDefaultAxes();
 
                                 size_per_sec->setTitle(QString::fromLocal8Bit("Octets par seconde"));
+                                size_per_sec->setAnimationOptions(QChart::AllAnimations);
                                 size_per_sec->axes(Qt::Horizontal).first()->setRange(0,60);
                                 size_per_sec->axes(Qt::Horizontal).first()->setTitleText("Secondes");
                                 size_per_sec->axes(Qt::Vertical).first()->setRange(0,100000);
@@ -320,7 +338,6 @@ Win::Win()
                                 size_per_sec_series->setColor("#1289A7");
                                 size_per_sec_view->setRenderHint(QPainter::Antialiasing);
                                 panel_capture_hbox->addWidget(size_per_sec_view);
-
 
                     panel_view_agents = new QWidget();
                     _init_view_agents();
@@ -350,16 +367,67 @@ Win::Win()
                                         chart_v3->setStyleSheet("background-color: white;");
 
 
-
                       // --------------- EVENEMEMENTS --------------- //
+
                       evenements = new QWidget;
-                        v_layout_1_2 = new QVBoxLayout();
-                        evenements->setLayout(v_layout_1_2);
-                        QTableView *ETMTV = new QTableView();
-                        ETM = new EventView_TableModel(ETMTV);
-                            v_layout_1_2->addWidget(ETMTV);
+                        events_h_lay = new QHBoxLayout();
+                        events_toolb = new QToolBar();
+                            v_layout_1_2 = new QVBoxLayout;
+                                ETMTV = new QTableView();
+                                    ETM = new EventView_TableModel(ETMTV);
+                                QSplitter *s2 = new QSplitter();
+                                ETM_TE = new QTextEdit();
+                                ETM_TE2_TEST = new QTextEdit(); // Test !!
+
+                                act_init(&show_associated_packets, loupe, QString::fromUtf8("Echange"));
+                                act_init(&pdf_report, pdf, QString::fromUtf8("PDF"));
+                                act_init(&json_report, json, QString::fromUtf8("JSON"));
+                                act_init(&xml_report, xml, QString::fromUtf8("XML"));
+                                act_init(&send_info, send, QString::fromUtf8("Envoyer"));
+
+                                events_toolb->setOrientation(Qt::Vertical);
+                                events_toolb->addAction(&show_associated_packets);
+                                events_toolb->addSeparator();
+                                events_toolb->addAction(&pdf_report);
+                                events_toolb->addAction(&json_report);
+                                events_toolb->addAction(&xml_report);
+                                events_toolb->addSeparator();
+                                events_toolb->addAction(&send_info);
+                                events_toolb->setIconSize(QSize(32,32));
+                                events_h_lay->addWidget(events_toolb);
+
+                                ETMTV->verticalHeader()->setVisible(false);
+                                ETMTV->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+                                ETMTV->verticalHeader()->setDefaultSectionSize(1);
+                                ETMTV->setFont(QFont("Calibri", 9, QFont::Bold));
+                                ETMTV->setEditTriggers(QAbstractItemView::NoEditTriggers);
+                                ETMTV->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+                                s2->addWidget(ETM_TE);
+                                s2->addWidget(ETM_TE2_TEST);
+                                s2->setOrientation(Qt::Horizontal);
+
+                            evenements->setLayout(events_h_lay);
+                                events_h_lay->addLayout(v_layout_1_2, 0);
+
+                            QSplitter *s1 = new QSplitter();
+                                s1->setOrientation(Qt::Vertical);
+                                s1->addWidget(ETMTV);
+                                s1->addWidget(s2);
+
+                            v_layout_1_2->addWidget(s1);
+
+                        // --------------- EVENEMEMENTS --------------- //
+                            //!\ Disloqué
+                                panel_map = new QWidget();
+                                    panel_map_vl = new QVBoxLayout();
+
+                                    _init_map();
+
+                       // --------------- Other INIT --------------- //
 
                         _init_routing_table();
+                        //_init_tcp_table();
 
  /* -------------------------------------------------------- FNCTS -------------------------------------------------------- */
     central_tab->setMovable(false);
@@ -388,7 +456,7 @@ Win::Win()
                         v_layout_root->addLayout(qhbl);
 
                         v_layout_root->addLayout(v_layout_1_0);
-                          v_layout_1_0->addWidget(info_text);
+                          //v_layout_1_0->addWidget(info_text);
                             info_text->setReadOnly(true);
                             info_text->append(Welcoming());
                             info_text->setFont(QFont("consolas", 10, QFont::Bold));
@@ -481,11 +549,13 @@ Win::Win()
                     http_brief_tree_view->setHeaderHidden(true);
 
                     panel_http_layout->addWidget(chart_v1);
-                         http_srv_chart->setTitle(QString::fromLocal8Bit("Répartition du flux HTTP"));
+                         http_srv_chart->setTitle(QString::fromUtf8("Répartition du flux HTTP"));
                          chart_v1->setRenderHint(QPainter::Antialiasing);
                          chart_v1->chart()->legend()->hide();
                          http_srv_chart->addSeries(http_srv_pie);
+                         http_srv_chart->setAnimationOptions(QChart::AllAnimations);
                          http_srv_pie->setHoleSize(0);
+                         http_srv_pie->setLabelsPosition(QPieSlice::LabelInsideHorizontal);
 
                     panel_http_layout2->addWidget(chart_v2);
                     panel_http_layout->addLayout(panel_http_layout2);
@@ -505,14 +575,18 @@ Win::Win()
                         http_method_pie->append("DELETE", 0);
                         http_method_pie->slices().at(4)->setColor(QColor("#0fb9b1"));
 
-                         http_method_chart->setTitle(QString::fromLocal8Bit("Requêtes HTTP par nombre"));
+                         http_method_chart->setTitle(QString::fromUtf8("Répartition des requêtes HTTP"));
+                         http_method_chart->setAnimationOptions(QChart::AllAnimations);
                          chart_v2->setRenderHint(QPainter::Antialiasing);
                          http_method_chart->addSeries(http_method_pie);
 
                          chart_v3 = new QChartView(http_code_chart);
                          chart_v3->setRenderHint(QPainter::Antialiasing);
                          http_code_chart->addSeries(http_code_pie);
-                         http_code_chart->setTitle(QString::fromLocal8Bit("Codes de réponse HTTP par nombre"));
+
+                         http_code_chart->setAnimationOptions(QChart::AllAnimations);
+                         http_code_chart->setTitle(QString::fromUtf8(" Répartition des codes de réponse HTTP"));
+                         http_code_chart->setAnimationOptions(QChart::AllAnimations);
                     panel_http_layout->addWidget(chart_v3);
                     chart_v3->setStyleSheet("background-color: white;");
 
@@ -534,8 +608,8 @@ Win::Win()
                     central_tab->addTab(evenements, "Evénements");
                     ETMTV->setShowGrid(false);  // 9
 
-                    central_tab->addTab(panel_view_agents, "Agents");
-                    central_tab->addTab(panel_info, "Info et Filtrage");
+                    central_tab->addTab(panel_view_agents, "Réseau");
+                    central_tab->addTab(panel_info, "Filtrage");
 
     root_widget->show();
     this->setCentralWidget(root_widget);
@@ -566,10 +640,13 @@ Win::Win()
         int_win_tree_view->setFont(QFont("Calibri", 12));
 
         panel_info_line_series();
+        _init_stats_panel();
+        _init_agent_panel();
+        _init_wlan_panel();
 
-        ETM->ADD_TO_LIST(new QStringList({"vv", "cc", "Warning", "ezf", "vv", "cc", "zzf", "ezf", "vv", "cc", "zzf", "ezf"}));
+            refresher->start();
 
-
+    QObject::connect(action_map, SIGNAL(triggered(bool)), this, SLOT(sh_map(bool)));
     QObject::connect(fullscreen_check, SIGNAL(toggled(bool)), this, SLOT(fullscreen(bool)));
     QObject::connect(babye, SIGNAL(triggered(bool)), qApp, SLOT(quit()));
     QObject::connect(cap_zoom_in, SIGNAL(triggered(bool)), this, SLOT(zoom_in_cap_panel()));
@@ -587,6 +664,8 @@ Win::Win()
     QObject::connect(filtering_history, SIGNAL(itemPressed(QListWidgetItem*)), this, SLOT(set_filter_text(QListWidgetItem*)));
     QObject::connect(list_of_devices, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(SHOW_APPROPRIATE_VIEW(QListWidgetItem*)));
     QObject::connect(routing_table, SIGNAL(triggered(bool)), _ROUTING_TABLE_ , SLOT(show()));
+    QObject::connect(net_tcp_table, SIGNAL(triggered(bool)), this, SLOT(sh_tcp_sessions(bool)));
+    QObject::connect(ETMTV, SIGNAL(clicked(const QModelIndex&)), this, SLOT(SET_EVENTS_TEXT(const QModelIndex&)));
 
     init_conf_win();
 }

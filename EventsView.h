@@ -3,38 +3,41 @@
 
 #include "QTableViewModel.h"
 #include <QScrollBar>
-
+#include <QDate>
 
 class EventView_TableModel : public Packets_TableModel
 {
        Q_OBJECT
 
-protected:
+private:
     QTableView *qtvp;
     EventView_TableModel *temp;
 
 public :
 
-    EventView_TableModel(QTableView* targ) : qtvp(targ) { qtvp->setModel(this); }
+    EventView_TableModel(QTableView* targ) : qtvp(targ) {
+        qtvp->setModel(this);
+    }
+
+    QList<QStringList> Details; // Exception !!
 
     QVariant data(const QModelIndex &ind, int role) const override {
 
         if(!ind.isValid()) { return QVariant(); }
         if(role == Qt::DisplayRole) { return packets_rlist[ind.row()][ind.column()]; }
 
-
         if(role == Qt::BackgroundColorRole)
         {
             for(int i = -9 ; i < 9 ; i ++){
-                if(index(ind.row(), ind.column()+i).data() == "Alerte") { return QColor("#ff5148"); } else {
-                 if(index(ind.row(), ind.column()+i).data() == "Warning") { return QColor("#fd9644"); } else {
-                   if(index(ind.row(), ind.column()+i).data() == "Info") { return QColor("#62a8ff"); }
+               if(index(ind.row(), ind.column()+i).data() == "Alerte") { return QColor("#E54C38"); } else {
+                 if(index(ind.row(), ind.column()+i).data() == "Warning") { return QColor("#ffbc93"); } else {
+                   if(index(ind.row(), ind.column()+i).data() == "Info") { return QColor("#BCECE6"); }
                     }
                 }
             }
         }
 
-        if(role == Qt::TextColorRole) { return QColor("#000000"); }
+        if(role == Qt::TextColorRole) { return QColor("#2f3640"); }
 
         return QVariant();
     }
@@ -78,12 +81,20 @@ public :
     }
 
 public slots:
-    void ADD_TO_LIST(QStringList* data) {
+
+    void ADD_TO_LIST(QStringList* data, QStringList _details_) {
+
+        Details.append(_details_);
 
         QStringList newQSL = *data;
         this->packets_rlist.push_back(newQSL);
         temp = new EventView_TableModel(qtvp);
-        temp->ADD_TO_LIST2(this->getpackrlist());
+        if(temp != NULL) { delete temp; }
+
+
+        // ***** IL Y'A PROBLEME ICI : REUTILISATION DE LA MEMOIRE APRES SA LIBERATION ***** //
+
+        // temp->ADD_TO_LIST2(this->getpackrlist()); // Voilaaa la redef
 
         if(qtvp->verticalScrollBar()->sliderPosition() == qtvp->verticalScrollBar()->maximum()) {
             qtvp->scrollToBottom();
@@ -93,7 +104,6 @@ public slots:
         data->clear();
     }
 };
-
 
 
 #endif // EVENTSVIEW_H

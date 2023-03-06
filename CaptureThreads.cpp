@@ -1,4 +1,4 @@
-#include "CaptureThreads.h"
+#include "CaptureThreads_FCTS.h"
 #include "Headers.h"
 #include <string>
 #include <QString>
@@ -7,6 +7,7 @@
 #include <QTime>
 #include <QMutex>
 #include <QRegExp>
+#include <iostream>
 
 using namespace std;
 
@@ -27,8 +28,6 @@ QString char_tohex(u_char in)
 
 QString short_to_hex(u_short in)
 {
-    // le u_short lit à l'envers !!???
-    // Ca marche -->  QString val = QString("%11").arg((int)*in, 0, 16);
     QString val = QString("%1").arg((int)in, 0, 16);;
     // 0x0800 -> 2048 dec
     return val;
