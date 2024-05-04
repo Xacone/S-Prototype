@@ -7,17 +7,21 @@ S-Prototype is a project on which I worked on in 2021 and which enabled me to im
 
 ---
 
-<b>*Geolocation of remote hosts with which a connection is established* 🌍​</b> <br><br>
+<b> <i>Geolocation of remote hosts with which a connection is established</i> 🌍​</b> <br><br>
 ![alt text](Assets/sproto.jpg)
 
-<b>*Real Time Packets Capture* 🛜​</b> <br><br>
-<video controls src="Assets/packet-capture.mp4" title="Title"></video>
+<br>
+<b> <i>Real Time Packets Capture</i> 🛜​</b> <br><br>
 
+https://github.com/Xacone/S-Prototype/assets/76184111/2f7768cd-a732-4200-81de-92afa48858ac
 
-<b>*Catching Nmap XMAS scans* 🔍</b> <br><br>
-<video controls src="Assets/sproto-xmas-scan-detect.mp4" title="Title"></video>
+<br>
+<b> <i>Catching Nmap XMAS scans</i> 🔍</b> <br><br>
 
+https://github.com/Xacone/S-Prototype/assets/76184111/756ff460-5959-4e08-a35f-5f1e64292812
 
-<b>*Real time HTTP traffic summary* 📊​</b> <br><br>
-<video controls src="Assets/http-packets-brief.mp4" title="Title"></video>
+<br>
+<b> <i>Real time HTTP traffic summary</i> 📊​</b> <br><br>
+
+https://github.com/Xacone/S-Prototype/assets/76184111/f2de9c9c-db98-4193-87e1-6f602f8e87c2
 
